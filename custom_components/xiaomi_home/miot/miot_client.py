@@ -64,7 +64,8 @@ from .const import (
     DEFAULT_CTRL_MODE, DEFAULT_INTEGRATION_LANGUAGE, DEFAULT_NICK_NAME, DOMAIN,
     MIHOME_CERT_EXPIRE_MARGIN, NETWORK_REFRESH_INTERVAL,
     OAUTH2_CLIENT_ID, SUPPORT_CENTRAL_GATEWAY_CTRL,
-    DEFAULT_COVER_DEAD_ZONE_WIDTH)
+    DEFAULT_COVER_DEAD_ZONE_WIDTH,
+    IGNORE_NOTIFY)
 from .miot_cloud import MIoTHttpClient, MIoTOauthClient
 from .miot_error import MIoTClientError, MIoTErrorCode
 from .miot_mips import (
@@ -1863,6 +1864,8 @@ class MIoTClient:
             }.items():
                 if did in self._device_list_cache:
                     continue
+                if info.get("name", "unknown") in IGNORE_NOTIFY.setdefault('name', []) or did in IGNORE_NOTIFY.setdefault('did', []):
+                    continue
                 count_add += 1
                 message_add += (
                     f'- {info.get("name", "unknown")} ({did}, '
@@ -1878,6 +1881,8 @@ class MIoTClient:
                 continue
             if 'del' in self._display_devs_notify and online is None:
                 # Device not exist
+                if info.get("name", "unknown") in IGNORE_NOTIFY.setdefault('name', []) or did in IGNORE_NOTIFY.setdefault('did', []):
+                    continue
                 if home_name_del != home_name_new:
                     message_del += f'\n[{home_name_new}]\n'
                     home_name_del = home_name_new
@@ -1888,6 +1893,8 @@ class MIoTClient:
                 continue
             if 'offline' in self._display_devs_notify:
                 # Device offline
+                if info.get("name", "unknown") in IGNORE_NOTIFY.setdefault('name', []) or did in IGNORE_NOTIFY.setdefault('did', []):
+                    continue
                 if home_name_offline != home_name_new:
                     message_offline += f'\n[{home_name_new}]\n'
                     home_name_offline = home_name_new

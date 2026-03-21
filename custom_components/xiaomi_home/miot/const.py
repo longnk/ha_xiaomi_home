@@ -92,8 +92,13 @@ UNSUPPORTED_MODELS: list = [
     'chuangmi.ir.v2',
     'era.airp.cwb03',
     'hmpace.motion.v6nfc',
-    'k0918.toothbrush.t700'
+    'k0918.toothbrush.t700',
+    'soocare.toothbrush.m1' 
 ]
+
+IGNORE_NOTIFY: dict = {
+    'name': ['平板灯']
+}
 
 DEFAULT_CLOUD_SERVER: str = 'cn'
 CLOUD_SERVERS: dict = {
